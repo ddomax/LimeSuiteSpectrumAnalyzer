@@ -1,0 +1,8 @@
+LIBRARY packedMonitor
+EXPORTS
+packedMonitorInitialize
+packedMonitorInitializeWithHandlers
+packedMonitorTerminate
+packedMonitorPrintStackTrace
+mlxPackedMonitor
+

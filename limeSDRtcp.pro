@@ -22,9 +22,9 @@ SOURCES += \
     spectrummonitor.cpp
 
 HEADERS += \
+    MatlabCode/build/for_redistribution_files_only/packedMonitor.h \
     include/LMS7002M_parameters.h \
     include/LimeSuite.h \
-    include/packedMonitor.h \
     limestreamer.h \
     mainwindow.h \
     spectrummonitor.h
@@ -40,24 +40,24 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # Environment for LimeSuite
 win32: LIBS += -L$$PWD/include/ -lLimeSuite
 
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include
+
 # Environment for Matlab
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+win32: LIBS += -L$$PWD/MatlabCode/build/for_redistribution_files_only/ -lpackedMonitor
 
-win32: LIBS += -L$$PWD/include/ -lpackedMonitor
-
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+INCLUDEPATH += $$PWD/MatlabCode/build/for_redistribution_files_only
+DEPENDPATH += $$PWD/MatlabCode/build/for_redistribution_files_only
 
 INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/include)
 INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/include/Win64)
 
-INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
-DEPENDPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
+#INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
+#DEPENDPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
 
-win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmex
-win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmx
-win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmat
-win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibeng
-win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcr
-win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcrrt
+#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmex
+#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmx
+#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmat
+#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibeng
+#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcr
+#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcrrt
