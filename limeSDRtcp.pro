@@ -2,7 +2,7 @@ QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++11 console
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -19,13 +19,16 @@ LIBS += -l$$PWD\LimeSuite
 SOURCES += \
     limestreamer.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    spectrummonitor.cpp
 
 HEADERS += \
     LMS7002M_parameters.h \
     LimeSuite.h \
+    include/packedMonitor.h \
     limestreamer.h \
-    mainwindow.h
+    mainwindow.h \
+    spectrummonitor.h
 
 FORMS += \
     mainwindow.ui
@@ -34,3 +37,44 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32: LIBS += -L$$PWD/include/ -lpackedMonitor
+
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include
+
+
+
+## .h文件搜索路径
+#INCLUDEPATH += D:/R2019a/extern/include
+#INCLUDEPATH += D:/R2019a/extern/include/Win64
+
+## 用到的MATLAB 的.lib库文件 及其搜索路径
+#INCLUDEPATH += D:/R2019a/extern/lib/win64/microsoft
+#DEPENDPATH += D:/R2019a/extern/lib/win64/microsoft
+
+#win32: LIBS += -LD:/R2019a/extern/lib/win64/microsoft -llibmex
+#win32: LIBS += -LD:/R2019a/extern/lib/win64/microsoft -llibmx
+#win32: LIBS += -LD:/R2019a/extern/lib/win64/microsoft -llibmat
+#win32: LIBS += -LD:/R2019a/extern/lib/win64/microsoft -llibeng
+#win32: LIBS += -LD:/R2019a/extern/lib/win64/microsoft -lmclmcr
+#win32: LIBS += -LD:/R2019a/extern/lib/win64/microsoft -lmclmcrrt
+##LIBS += -LD:/R2019a/extern/lib/win64/microsoft/*.lib
+
+# .h文件搜索路径
+INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/include)
+INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/include/Win64)
+
+# 用到的MATLAB 的.lib库文件 及其搜索路径
+INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
+DEPENDPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
+
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmex
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmx
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmat
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibeng
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcr
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcrrt
+#LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)/*.lib
+
+#$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
