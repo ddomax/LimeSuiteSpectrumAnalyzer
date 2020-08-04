@@ -39,6 +39,8 @@ MainWindow::~MainWindow()
     }
     devThread.quit();
     devThread.wait();
+    monitorThread.quit();
+    monitorThread.wait();
     sender->deleteLater();
     delete ui;
 }
@@ -133,6 +135,7 @@ void MainWindow::on_fftLenSlider_sliderReleased()
     {
         exit(-2);
     }
+    Sleep(100); // Wait UDP
     dev->resumeStreaming();
 }
 

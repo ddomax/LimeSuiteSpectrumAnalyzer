@@ -394,7 +394,7 @@ void limeStreamer::pauseHandler(lms_device_t *device, lms_stream_t *streamId)
 int limeStreamer::waitPauseHandlerDone(int time_out_ms)
 {
     auto tic = chrono::high_resolution_clock::now();
-    while (!pauseHandlerDone && !skipWaitPause)
+    while (!pauseHandlerDone && !skipWaitPause && isRunning)
     {
         if(chrono::high_resolution_clock::now() - tic > chrono::milliseconds(time_out_ms))
             return -1;
