@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3932513506" file="D:\Matlab_Workspace\SpectrumMonitor\packedMonitor_dll.prj" location="D:\Matlab_Workspace\SpectrumMonitor" name="packedMonitor_dll" preferred-package-location="D:\Matlab_Workspace\SpectrumMonitor\packedMonitor_dll\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
+  <configuration build-checksum="3407492878" file="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build.prj" location="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode" name="build" preferred-package-location="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
     <param.appname>packedMonitor</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.1</param.version>
+    <param.version>1.42</param.version>
     <param.authnamewatermark />
     <param.email />
     <param.company />
@@ -16,13 +16,13 @@
     <param.logo />
     <param.install.notes />
     <param.target.install.notes />
-    <param.intermediate>${PROJECT_ROOT}\packedMonitor_dll\for_testing</param.intermediate>
-    <param.files.only>${PROJECT_ROOT}\packedMonitor_dll\for_redistribution_files_only</param.files.only>
-    <param.output>${PROJECT_ROOT}\packedMonitor_dll\for_redistribution</param.output>
-    <param.logdir>${PROJECT_ROOT}\packedMonitor_dll</param.logdir>
+    <param.intermediate>${PROJECT_ROOT}\build\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\build\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\build\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\build</param.logdir>
     <param.enable.clean.build>false</param.enable.clean.build>
     <param.user.defined.mcr.options />
-    <param.target.type>subtarget.library.cpp</param.target.type>
+    <param.target.type>subtarget.library.c</param.target.type>
     <param.support.packages />
     <param.namespace />
     <param.classorg />
@@ -67,6 +67,7 @@
       <param.logdir />
       <param.enable.clean.build />
       <param.user.defined.mcr.options />
+      <param.target.type />
       <param.support.packages />
       <param.namespace />
       <param.classorg />
@@ -106,10 +107,10 @@
     <fileset.depfun />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\packedMonitor_dll\for_testing" name="packedMonitor.h" optional="false">D:\Matlab_Workspace\SpectrumMonitor\packedMonitor_dll\for_testing\packedMonitor.h</file>
-      <file location="${PROJECT_ROOT}\packedMonitor_dll\for_testing" name="readme.txt" optional="true">D:\Matlab_Workspace\SpectrumMonitor\packedMonitor_dll\for_testing\readme.txt</file>
-      <file location="${PROJECT_ROOT}\packedMonitor_dll\for_testing" name="packedMonitor.lib" optional="false">D:\Matlab_Workspace\SpectrumMonitor\packedMonitor_dll\for_testing\packedMonitor.lib</file>
-      <file location="${PROJECT_ROOT}\packedMonitor_dll\for_testing" name="packedMonitor.dll" optional="false">D:\Matlab_Workspace\SpectrumMonitor\packedMonitor_dll\for_testing\packedMonitor.dll</file>
+      <file location="${PROJECT_ROOT}\build\for_testing" name="packedMonitor.dll" optional="false">D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing\packedMonitor.dll</file>
+      <file location="${PROJECT_ROOT}\build\for_testing" name="packedMonitor.h" optional="false">D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing\packedMonitor.h</file>
+      <file location="${PROJECT_ROOT}\build\for_testing" name="packedMonitor.lib" optional="false">D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing\packedMonitor.lib</file>
+      <file location="${PROJECT_ROOT}\build\for_testing" name="readme.txt" optional="true">D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing\readme.txt</file>
     </build-deliverables>
     <workflow />
     <matlab>

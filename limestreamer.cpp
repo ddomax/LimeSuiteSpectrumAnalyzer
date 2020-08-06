@@ -171,28 +171,24 @@ int limeStreamer::streaming()
         return -1;
     }
 
-    //Initialize data buffers
-    static const int udpPackLenMax = 8192; //complex samples counts
-    static const int udpPackNumMax = 128; //complex samples counts
-    static const int sampleCntMax = udpPackLenMax*udpPackNumMax; //max complex samples counts
-    static int16_t buffer[sampleCntMax*2]; //buffer to hold complex values (2*samples))
-
     //Start streaming
     LMS_StartStream(&streamId);
     emit startStreaming();
 
+    //Initialize data buffers
+    static const int udpPackLenMax = 4*1024*1024; //complex samples counts UDP:8192
+    static const int udpPackNumMax = 1; //complex samples counts UDP:128
+    static const int sampleCntMax = udpPackLenMax*udpPackNumMax; //max complex samples counts
+    static int16_t buffer[sampleCntMax*2]; //buffer to hold complex values (2*samples))
+
     //Streaming
-#ifdef USE_GNU_PLOT
-    GNUPlotPipe gp;
-    gp.write("set size square\n set xrange[-2050:2050]\n set yrange[-2050:2050]\n");
-#endif
     while(1)
     {
     auto t1 = chrono::high_resolution_clock::now();
     int samplesRead = 0,readReturn = 0;
     int sampleCnt = udpPackLen * udpPackNum;
     int loopCnt = 0;
-    while (chrono::high_resolution_clock::now() - t1 < chrono::milliseconds(ctrMinReadDuration)) //run for 20 seconds
+//    while (chrono::high_resolution_clock::now() - t1 < chrono::milliseconds(ctrMinReadDuration)) //run for 20 seconds
     {
         //Receive samples
         readReturn = LMS_RecvStream(&streamId, buffer, sampleCnt, NULL, 2000);
@@ -206,11 +202,21 @@ int limeStreamer::streaming()
             samplesRead += readReturn;
         }
         loopCnt++;
+        if (*processDone)
+        {
+            memcpy(outBuffer, buffer, sampleCnt*sizeof(int16_t)*2);
+            *processDone = false;
+        }
+        else
+        {
+            qDebug() << "Packet Unprocessed!";
+        }
     //I and Q samples are interleaved in buffer: IQIQIQ...
     /*
         CODE FOR PROCESSING RECEIVED SAMPLES
     */
     }
+#ifdef USE_UDP
     const int retryMax = 10;
     int retryCnt = 0;
     for (int i=0;i<udpPackNum;i++)
@@ -229,11 +235,12 @@ int limeStreamer::streaming()
             }
         }
     }
-    sendPackCnt++;
-    auto captureTime = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - t1);
-    qDebug() << "send:" <<sendPackCnt <<"rd:" << samplesRead << "sps:" << sampleCnt << "time:" << captureTime.count() << "loop:" << loopCnt;
+#endif
+//    sendPackCnt++;
+//    auto captureTime = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - t1);
+//    qDebug() << "send:" <<sendPackCnt <<"rd:" << samplesRead << "sps:" << sampleCnt << "time:" << captureTime.count() << "loop:" << loopCnt;
 //    while(chrono::high_resolution_clock::now() - t1 < chrono::milliseconds(1100));
-    checkLock(device);
+//    checkLock(device);
     checkDrop(&streamId);
     if (!isRunning)
     {

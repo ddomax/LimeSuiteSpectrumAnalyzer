@@ -22,12 +22,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     devThread.start();
 
+    size_t stackSize = 2000000000;
+    monitorThread.setStackSize(static_cast<uint>(stackSize));
     monitor = new SpectrumMonitor();
     monitor->moveToThread(&monitorThread);
     connect(this, &MainWindow::startMonitor, monitor, &SpectrumMonitor::runMonitor);
     connect(&monitorThread, &QThread::finished, monitor, &QObject::deleteLater);
 
     monitorThread.start();
+
+    dev->outBuffer = swapBuffer;
+    monitor->inBuffer = swapBuffer;
+
+    bool processDone = true;
+    dev->processDone = &processDone;
+    monitor->processDone = &processDone;
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +48,7 @@ MainWindow::~MainWindow()
     }
     devThread.quit();
     devThread.wait();
+    monitor->stopMonitor();
     monitorThread.quit();
     monitorThread.wait();
     sender->deleteLater();
@@ -120,14 +130,23 @@ void MainWindow::on_fftLenSlider_sliderReleased()
     }
     dev->pauseStreaming();
     dev->waitPauseHandlerDone();
-    if (udpPackNum>7)
-    {
-        dev->setMinReadDuration(udpPackNum*25);
-    }
-    else
-    {
-        dev->setMinReadDuration(100);
-    }
+//    if (udpPackNum>7)
+//    {
+//        dev->setMinReadDuration(udpPackNum*25);
+//    }
+//    else
+//    {
+//        dev->setMinReadDuration(100);
+//    }
+
+    udpPackNum = 1;
+    double sampleRate_Hz = 1e6 * ui->spanSlider->value();
+    double sampleTime_Seconds = 0.05;
+    int sampleNum = 1<<((int)(log2(sampleTime_Seconds*sampleRate_Hz))+1);
+    sampleNum = sampleNum < (0.25*1024*1024) ? sampleNum : 0.25*1024*1024;
+    sampleNum = sampleNum < sampleCnt ? sampleCnt : sampleNum;
+    udpPackLen = sampleNum;
+
     dev->setUdpPacketLen(udpPackLen);
     dev->setUdpPacketNum(udpPackNum);
     QString ia = QString("udpComPackLen:%1;").arg(sampleCnt);
@@ -135,6 +154,8 @@ void MainWindow::on_fftLenSlider_sliderReleased()
     {
         exit(-2);
     }
+    monitor->paramSampleNum = udpPackLen*udpPackNum;
+    monitor->paramNFFT = sampleCnt;
     Sleep(100); // Wait UDP
     dev->resumeStreaming();
 }
@@ -207,6 +228,7 @@ void MainWindow::on_spanSlider_sliderReleased()
     {
         exit(-2);
     }
+    on_fftLenSlider_sliderReleased();
 }
 
 void MainWindow::on_reCalButton_clicked()

@@ -1,11 +1,11 @@
-//
-// MATLAB Compiler: 6.4 (R2017a)
-// Date: Tue Aug 04 19:09:18 2020
-// Arguments:
-// "-B""macro_default""-W""cpplib:packedMonitor""-T""link:lib""-d""D:\Matlab_Wor
-// kspace\SpectrumMonitor\packedMonitor_dll\for_testing""-v""D:\Matlab_Workspace
-// \SpectrumMonitor\packedMonitor.m"
-//
+/*
+ * MATLAB Compiler: 6.4 (R2017a)
+ * Date: Thu Aug 06 01:57:34 2020
+ * Arguments:
+ * "-B""macro_default""-W""lib:packedMonitor""-T""link:lib""-d""D:\Qt_workspace\
+ * LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing""-v""D:\Qt_workspace\L
+ * imeSuiteSpectrumAnalyzer\MatlabCode\packedMonitor.m"
+ */
 
 #ifndef __packedMonitor_h
 #define __packedMonitor_h 1
@@ -14,7 +14,6 @@
 #  pragma implementation "mclmcrrt.h"
 #endif
 #include "mclmcrrt.h"
-#include "mclcppclass.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -79,36 +78,10 @@ extern LIB_packedMonitor_C_API
 bool MW_CALL_CONV mlxPackedMonitor(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[]);
 
 
+
+extern LIB_packedMonitor_C_API bool MW_CALL_CONV mlfPackedMonitor(mxArray* iqBuffer, mxArray* sampleNum, mxArray* NFFT);
+
 #ifdef __cplusplus
 }
-#endif
-
-#ifdef __cplusplus
-
-/* On Windows, use __declspec to control the exported API */
-#if defined(_MSC_VER) || defined(__BORLANDC__)
-
-#ifdef EXPORTING_packedMonitor
-#define PUBLIC_packedMonitor_CPP_API __declspec(dllexport)
-#else
-#define PUBLIC_packedMonitor_CPP_API __declspec(dllimport)
-#endif
-
-#define LIB_packedMonitor_CPP_API PUBLIC_packedMonitor_CPP_API
-
-#else
-
-#if !defined(LIB_packedMonitor_CPP_API)
-#if defined(LIB_packedMonitor_C_API)
-#define LIB_packedMonitor_CPP_API LIB_packedMonitor_C_API
-#else
-#define LIB_packedMonitor_CPP_API /* empty! */ 
-#endif
-#endif
-
-#endif
-
-extern LIB_packedMonitor_CPP_API void MW_CALL_CONV packedMonitor();
-
 #endif
 #endif

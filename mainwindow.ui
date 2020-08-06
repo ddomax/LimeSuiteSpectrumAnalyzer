@@ -23,7 +23,7 @@
          <number>8</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>22</number>
         </property>
         <property name="pageStep">
          <number>1</number>
@@ -42,7 +42,7 @@
          <number>8</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>22</number>
         </property>
        </widget>
       </item>

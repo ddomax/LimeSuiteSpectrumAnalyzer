@@ -25,6 +25,8 @@ public:
     int setMinReadDuration(int time);
     bool skipWaitPause = false;
     void clearSendCnt();
+    int16_t *outBuffer;
+    bool *processDone;
 
 private:
     int error(QString errorStr = "Undefined Error!");

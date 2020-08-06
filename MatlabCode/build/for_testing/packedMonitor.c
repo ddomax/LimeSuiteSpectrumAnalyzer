@@ -1,11 +1,11 @@
-//
-// MATLAB Compiler: 6.4 (R2017a)
-// Date: Wed Aug 05 17:16:55 2020
-// Arguments:
-// "-B""macro_default""-W""cpplib:packedMonitor""-T""link:lib""-d""D:\Qt_workspa
-// ce\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing""-v""D:\Qt_workspac
-// e\LimeSuiteSpectrumAnalyzer\MatlabCode\packedMonitor.m"
-//
+/*
+ * MATLAB Compiler: 6.4 (R2017a)
+ * Date: Thu Aug 06 01:57:34 2020
+ * Arguments:
+ * "-B""macro_default""-W""lib:packedMonitor""-T""link:lib""-d""D:\Qt_workspace\
+ * LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing""-v""D:\Qt_workspace\L
+ * imeSuiteSpectrumAnalyzer\MatlabCode\packedMonitor.m"
+ */
 
 #include <stdio.h>
 #define EXPORTING_packedMonitor 1
@@ -139,10 +139,9 @@ bool MW_CALL_CONV mlxPackedMonitor(int nlhs, mxArray *plhs[], int nrhs, mxArray 
   return mclFeval(_mcr_inst, "packedMonitor", nlhs, plhs, nrhs, prhs);
 }
 
-LIB_packedMonitor_CPP_API 
-void MW_CALL_CONV packedMonitor(const mwArray& iqBuffer, const mwArray& sampleNum, const 
-                                mwArray& NFFT)
+LIB_packedMonitor_C_API 
+bool MW_CALL_CONV mlfPackedMonitor(mxArray* iqBuffer, mxArray* sampleNum, mxArray* NFFT)
 {
-  mclcppMlfFeval(_mcr_inst, "packedMonitor", 0, 0, 3, &iqBuffer, &sampleNum, &NFFT);
+  return mclMlfFeval(_mcr_inst, "packedMonitor", 0, 0, 3, iqBuffer, sampleNum, NFFT);
 }
 

@@ -19,6 +19,7 @@ SOURCES += \
     limestreamer.cpp \
     main.cpp \
     mainwindow.cpp \
+#    qcustomplot.cpp \
     spectrummonitor.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     include/LimeSuite.h \
     limestreamer.h \
     mainwindow.h \
+#    qcustomplot.h \
     spectrummonitor.h
 
 FORMS += \
@@ -52,12 +54,15 @@ DEPENDPATH += $$PWD/MatlabCode/build/for_redistribution_files_only
 INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/include)
 INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/include/Win64)
 
-#INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
-#DEPENDPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
+INCLUDEPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
+DEPENDPATH += $$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft)
 
-#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmex
-#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmx
-#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmat
-#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibeng
-#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcr
-#win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcrrt
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmex
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmx
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibmat
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -llibeng
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcr
+win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcrrt
+
+#QMAKE_CXXFLAGS += /F 128000000
+QMAKE_LFLAGS   += /STACK:4000000000

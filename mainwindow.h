@@ -27,6 +27,7 @@ private:
     bool isStreaming = false;
     void Sleep(int msec);
     void connectSliderAndBox();
+    int16_t swapBuffer[8*1024*1024];
 
 private slots:
     void on_fftLenSlider_sliderReleased();
