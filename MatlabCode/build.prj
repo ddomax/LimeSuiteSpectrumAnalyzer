@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3407492878" file="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build.prj" location="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode" name="build" preferred-package-location="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
+  <configuration build-checksum="235346630" file="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build.prj" location="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode" name="build" preferred-package-location="D:\Qt_workspace\LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.library" target-name="Library Compiler">
     <param.appname>packedMonitor</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.42</param.version>
+    <param.version>1.55</param.version>
     <param.authnamewatermark />
     <param.email />
     <param.company />
@@ -26,8 +26,8 @@
     <param.support.packages />
     <param.namespace />
     <param.classorg />
-    <param.web.mcr>true</param.web.mcr>
-    <param.package.mcr>false</param.package.mcr>
+    <param.web.mcr>false</param.web.mcr>
+    <param.package.mcr>true</param.package.mcr>
     <param.no.mcr>false</param.no.mcr>
     <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
     <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
@@ -71,8 +71,6 @@
       <param.support.packages />
       <param.namespace />
       <param.classorg />
-      <param.web.mcr />
-      <param.package.mcr />
       <param.no.mcr />
       <param.web.mcr.name />
       <param.package.mcr.name />

@@ -5,6 +5,7 @@
 #include "limestreamer.h"
 #include <QThread>
 #include "spectrummonitor.h"
+#include "spectrumplotter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,10 +25,15 @@ private:
     QThread devThread,monitorThread;
     limeStreamer* dev;
     SpectrumMonitor* monitor;
+    SpectrumPlotter* plotter;
     bool isStreaming = false;
     void Sleep(int msec);
     void connectSliderAndBox();
+    void setUI();
     int16_t swapBuffer[8*1024*1024];
+    static const int FFTOUTNUM = 16384;
+    double fftSwapBuffer[FFTOUTNUM];
+    double freqSwapBuffer[FFTOUTNUM];
 
 private slots:
     void on_fftLenSlider_sliderReleased();
@@ -37,11 +43,12 @@ private slots:
     void on_streamButton_clicked();
     void on_stopButton_clicked();
     void on_reCalButton_clicked();
-    void on_monitorButton_clicked();
+    void on_detectorBox_currentIndexChanged(const QString& currentText);
+    void on_refSlider_sliderReleased();
+    void on_divSlider_sliderReleased();
 
 signals:
     void startRunning();
-    void startMonitor();
 
 public slots:
     void on_receiveResult(const QString &str);

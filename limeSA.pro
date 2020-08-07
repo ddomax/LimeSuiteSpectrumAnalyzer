@@ -1,6 +1,6 @@
 QT       += core gui network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11 console
 
@@ -19,8 +19,9 @@ SOURCES += \
     limestreamer.cpp \
     main.cpp \
     mainwindow.cpp \
-#    qcustomplot.cpp \
-    spectrummonitor.cpp
+    qcustomplot.cpp \
+    spectrummonitor.cpp \
+    spectrumplotter.cpp
 
 HEADERS += \
     MatlabCode/build/for_redistribution_files_only/packedMonitor.h \
@@ -28,8 +29,9 @@ HEADERS += \
     include/LimeSuite.h \
     limestreamer.h \
     mainwindow.h \
-#    qcustomplot.h \
-    spectrummonitor.h
+    qcustomplot.h \
+    spectrummonitor.h \
+    spectrumplotter.h
 
 FORMS += \
     mainwindow.ui
@@ -65,4 +67,4 @@ win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microso
 win32: LIBS += -L$$quote(C:/Program Files/MATLAB/R2017a/extern/lib/win64/microsoft) -lmclmcrrt
 
 #QMAKE_CXXFLAGS += /F 128000000
-QMAKE_LFLAGS   += /STACK:4000000000
+QMAKE_LFLAGS   += /STACK:512000000

@@ -59,6 +59,7 @@ signals:
     void stopRunning();
     void startRunning();
     void startStreaming();
+    void startProcess();
 };
 
 #endif // LIMESTREAMER_H

@@ -1,6 +1,6 @@
 /*
  * MATLAB Compiler: 6.4 (R2017a)
- * Date: Thu Aug 06 01:57:34 2020
+ * Date: Fri Aug 07 17:29:45 2020
  * Arguments:
  * "-B""macro_default""-W""lib:packedMonitor""-T""link:lib""-d""D:\Qt_workspace\
  * LimeSuiteSpectrumAnalyzer\MatlabCode\build\for_testing""-v""D:\Qt_workspace\L
@@ -140,8 +140,9 @@ bool MW_CALL_CONV mlxPackedMonitor(int nlhs, mxArray *plhs[], int nrhs, mxArray 
 }
 
 LIB_packedMonitor_C_API 
-bool MW_CALL_CONV mlfPackedMonitor(mxArray* iqBuffer, mxArray* sampleNum, mxArray* NFFT)
+bool MW_CALL_CONV mlfPackedMonitor(int nargout, mxArray** freqOut, mxArray** fftOut, 
+                                   mxArray* iqBuffer, mxArray* settings)
 {
-  return mclMlfFeval(_mcr_inst, "packedMonitor", 0, 0, 3, iqBuffer, sampleNum, NFFT);
+  return mclMlfFeval(_mcr_inst, "packedMonitor", nargout, 2, 2, freqOut, fftOut, iqBuffer, settings);
 }
 

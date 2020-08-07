@@ -206,10 +206,17 @@ int limeStreamer::streaming()
         {
             memcpy(outBuffer, buffer, sampleCnt*sizeof(int16_t)*2);
             *processDone = false;
+            emit startProcess();
         }
         else
         {
-            qDebug() << "Packet Unprocessed!";
+            static int processLoss = 0;
+            processLoss++;
+            if (sendPackCnt % 100 == 0)
+            {
+                qDebug() << "Packet Unprocessed: " << processLoss;
+                processLoss = 0;
+            }
         }
     //I and Q samples are interleaved in buffer: IQIQIQ...
     /*
