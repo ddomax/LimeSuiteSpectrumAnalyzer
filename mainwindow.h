@@ -6,6 +6,8 @@
 #include <QThread>
 #include "spectrummonitor.h"
 #include "spectrumplotter.h"
+#include "filesink.h"
+#include "filesource.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,10 +24,12 @@ public:
 private:
     Ui::MainWindow *ui;
     QUdpSocket* sender;
-    QThread devThread,monitorThread;
+    QThread devThread,monitorThread,sinkThread,sourceThread;
     limeStreamer* dev;
     SpectrumMonitor* monitor;
     SpectrumPlotter* plotter;
+    FileSink* sink;
+    FileSource* source;
     bool isStreaming = false;
     void Sleep(int msec);
     void connectSliderAndBox();
@@ -34,6 +38,10 @@ private:
     static const int FFTOUTNUM = 16384;
     double fftSwapBuffer[FFTOUTNUM];
     double freqSwapBuffer[FFTOUTNUM];
+    double fftSinkBuffer[FFTOUTNUM];
+    double freqSinkBuffer[FFTOUTNUM];
+    double fftSourceBuffer[FFTOUTNUM];
+    double freqSourceBuffer[FFTOUTNUM];
 
 private slots:
     void on_fftLenSlider_sliderReleased();
@@ -43,7 +51,10 @@ private slots:
     void on_streamButton_clicked();
     void on_stopButton_clicked();
     void on_reCalButton_clicked();
+    void on_saveButton_clicked();
+    void on_openButton_clicked();
     void on_detectorBox_currentIndexChanged(const QString& currentText);
+    void on_replaySpeedBox_currentIndexChanged(const QString& currentText);
     void on_refSlider_sliderReleased();
     void on_divSlider_sliderReleased();
 

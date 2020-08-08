@@ -306,6 +306,23 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="saveButton">
+        <property name="text">
+         <string>save</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="openButton">
+        <property name="text">
+         <string>open</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="replaySpeedBox"/>
+      </item>
+      <item>
        <widget class="QComboBox" name="detectorBox"/>
       </item>
      </layout>

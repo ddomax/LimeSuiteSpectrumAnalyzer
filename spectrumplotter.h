@@ -20,6 +20,7 @@ public:
     void setSpan(double center_MHz, double span_MHz);
     void setRefLevel(double refLevel_dBm);
     void setLowLevel(double lowLevel_dBm);
+    bool replayMode = false;
 
 private:
     QCustomPlot *specPlot;
@@ -39,6 +40,9 @@ public slots:
     void showTracer(QMouseEvent *event);
     void lockTracer(QMouseEvent *event);
     void sendUDP();
+
+signals:
+    void readFrame(int frameSize);
 
 };
 

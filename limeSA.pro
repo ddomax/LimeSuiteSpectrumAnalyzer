@@ -2,7 +2,7 @@ QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-CONFIG += c++11 console
+CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -16,6 +16,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    filesink.cpp \
+    filesource.cpp \
     limestreamer.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -25,6 +27,8 @@ SOURCES += \
 
 HEADERS += \
     MatlabCode/build/for_redistribution_files_only/packedMonitor.h \
+    filesink.h \
+    filesource.h \
     include/LMS7002M_parameters.h \
     include/LimeSuite.h \
     limestreamer.h \

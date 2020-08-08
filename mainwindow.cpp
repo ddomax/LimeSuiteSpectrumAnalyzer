@@ -32,19 +32,41 @@ MainWindow::MainWindow(QWidget *parent)
 
     monitorThread.start();
 
+    sink = new FileSink();
+    sink->moveToThread(&sinkThread);
+    connect(monitor, SIGNAL(saveFrame(int)), sink, SLOT(writeFrame(int)));
+    connect(&sinkThread, &QThread::finished, sink, &QObject::deleteLater);
+
+    sinkThread.start();
+
     plotter = new SpectrumPlotter();
     plotter->setupPlot(ui->specPlotWidget);
     connect(monitor, &SpectrumMonitor::rePlot, plotter, &SpectrumPlotter::runPlotter);
     connect(ui->specPlotWidget, SIGNAL(mouseMove(QMouseEvent*)), plotter, SLOT(showTracer(QMouseEvent*)));
     connect(ui->specPlotWidget, SIGNAL(mousePress(QMouseEvent*)), plotter, SLOT(lockTracer(QMouseEvent*)));
 
+    source = new FileSource();
+    source->moveToThread(&sourceThread);
+    connect(source, SIGNAL(rePlot()), plotter, SLOT(runPlotter()));
+    connect(plotter, SIGNAL(readFrame(int)), source, SLOT(readFrame(int)));
+    connect(&sourceThread, &QThread::finished, source, &QObject::deleteLater);
+
+    sourceThread.start();
+
     dev->outBuffer = swapBuffer;
     monitor->inBuffer = swapBuffer;
 
     monitor->fftOutBuffer = fftSwapBuffer;
     monitor->freqOutBuffer = freqSwapBuffer;
+    source->valueOutBuffer = fftSwapBuffer;
+    source->keyOutBuffer = freqSwapBuffer;
     plotter->fftInBuffer = fftSwapBuffer;
     plotter->freqInBuffer = freqSwapBuffer;
+
+    monitor->fftSaveBuffer = fftSinkBuffer;
+    monitor->freqSaveBuffer = freqSinkBuffer;
+    sink->valueInBuffer = fftSinkBuffer;
+    sink->keyInBuffer = freqSinkBuffer;
 
     bool processDone = true;
     dev->processDone = &processDone;
@@ -54,11 +76,16 @@ MainWindow::MainWindow(QWidget *parent)
     monitor->drawDone = &drawDone;
     plotter->drawDone = &drawDone;
 
-    setUI();
+    bool saveDone = true;
+    monitor->saveDone = &saveDone;
+    sink->saveDone = &saveDone;
+
+    setUI(); // setUI will trig indexChanged(), must be called after monitor is initialized!
 }
 
 MainWindow::~MainWindow()
 {
+    on_stopButton_clicked();
     QString ia = QString("Exit:0;");
     if (sender->writeDatagram(ia.toLocal8Bit(),ia.size(),QHostAddress::Broadcast,45456) == -1)
     {
@@ -68,8 +95,14 @@ MainWindow::~MainWindow()
     devThread.wait();
     monitorThread.quit();
     monitorThread.wait();
+    sinkThread.quit();
+    sinkThread.wait();
+    sourceThread.quit();
+    sourceThread.wait();
     plotter->deleteLater();
     sender->deleteLater();
+    sink->deleteLater();
+    source->deleteLater();
     delete ui;
 }
 
@@ -106,11 +139,16 @@ void MainWindow::setUI()
     QStringList detectorBoxList;
     detectorBoxList << "Sample" << "Peak";
     ui->detectorBox->addItems(detectorBoxList);
+
+    QStringList replaySpeedBoxList;
+    replaySpeedBoxList << "0.1x" << "1x" << "10x" << "30x" << "Fastest";
+    ui->replaySpeedBox->addItems(replaySpeedBoxList);
 }
 
 void MainWindow::on_streamButton_clicked()
 {
     ui->streamButton->setText("Initialzing...");
+    ui->openButton->setDisabled(true);
     QString ia = QString("clearBuffer:0;");
     if (sender->writeDatagram(ia.toLocal8Bit(),ia.size(),QHostAddress::Broadcast,45456) == -1)
     {
@@ -124,12 +162,26 @@ void MainWindow::on_streamButton_clicked()
     on_centerSlider_sliderReleased();
     on_spanSlider_sliderReleased();
     on_detectorBox_currentIndexChanged(ui->detectorBox->currentText());
+    on_refSlider_sliderReleased();
+    on_divSlider_sliderReleased();
     dev->skipWaitPause = false;
     emit startRunning();
 }
 
 void MainWindow::on_stopButton_clicked()
 {
+    if (plotter->replayMode)
+    {
+        ui->openButton->setDisabled(false);
+        ui->streamButton->setDisabled(false);
+        ui->saveButton->setDisabled(false);
+        ui->fftLenSlider->setDisabled(false);
+        ui->gainSlider->setDisabled(false);
+        ui->centerSlider->setDisabled(false);
+        plotter->replayMode = false;
+        source->closeFile();
+        return;
+    }
     dev->stopStreaming();
     Sleep(3000);
     if (isStreaming && ui->streamButton->isEnabled()) //streamButton not clicked but the thread is still running, kill it!
@@ -141,6 +193,31 @@ void MainWindow::on_stopButton_clicked()
         on_stopRunning();
         qDebug() << "Force Quit devThread!";
     }
+    sink->closeFile();
+    ui->openButton->setDisabled(false);
+}
+
+void MainWindow::on_saveButton_clicked()
+{
+    sink->setFileName(this);
+}
+
+void MainWindow::on_openButton_clicked()
+{
+    if (source->openFile(this) != 0)
+    {
+        return;
+        qDebug() << "MainWindow: cannot open file!";
+    }
+    ui->openButton->setDisabled(true);
+    ui->streamButton->setDisabled(true);
+    ui->saveButton->setDisabled(true);
+    ui->fftLenSlider->setDisabled(true);
+    ui->gainSlider->setDisabled(true);
+    ui->centerSlider->setDisabled(true);
+    plotter->replayMode = true;
+    source->readFrame(FFTOUTNUM);
+
 }
 
 void MainWindow::on_fftLenSlider_sliderReleased()
@@ -190,6 +267,22 @@ void MainWindow::on_detectorBox_currentIndexChanged(const QString& currentText)
     monitor->setDetector(currentText);
 }
 
+void MainWindow::on_replaySpeedBox_currentIndexChanged(const QString& currentText)
+{
+    if (currentText=="0.1x")
+        source->setInterval(300);
+    else if (currentText=="1x")
+        source->setInterval(30);
+    else if(currentText=="10x")
+        source->setInterval(3);
+    else if(currentText=="30x")
+        source->setInterval(1);
+    else if(currentText=="Fastest")
+        source->setInterval(0);
+    else
+        qDebug() << "Unknown replay speed!";
+}
+
 void MainWindow::on_receiveResult(const QString &str)
 {
     qDebug() << str;
@@ -215,8 +308,9 @@ void MainWindow::on_startStreaming()
 {
     ui->streamButton->setText("Streaming started");
     Sleep(100);
-    monitor->runMonitor();
-    plotter->runPlotter();
+    monitor->runMonitor(); // Workaround for 'done' keeps false at the beginning
+    plotter->runPlotter(); // Workaround for 'done' keeps false at the beginning
+//    sink->writeFrame(FFTOUTNUM); // 'done' fixed in monitor's constructor
 }
 
 void MainWindow::on_gainSlider_sliderReleased()

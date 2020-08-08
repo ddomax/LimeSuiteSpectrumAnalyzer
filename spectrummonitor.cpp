@@ -8,7 +8,8 @@ using namespace std;
 SpectrumMonitor::SpectrumMonitor(QObject *parent) : QObject(parent)
 {
     packedMonitorInitialize();
-    settingsDB[settingList::detector] = 2;
+//    settingsDB[settingList::detector] = 2;
+//    *saveDone = true;
     qDebug() << "packedMonitorInitialize";
 }
 
@@ -41,6 +42,19 @@ void SpectrumMonitor::runMonitor()
     {
         qDebug() << "Loss Plot!";
     }
+
+    if (*saveDone)
+    {
+        memcpy(freqSaveBuffer, freqDB, FFTOUTNUM*sizeof(double));
+        memcpy(fftSaveBuffer, fftDB, FFTOUTNUM*sizeof (double));
+        *saveDone = false;
+        emit saveFrame(FFTOUTNUM);
+    }
+    else
+    {
+        qDebug() << "Loss Save!";
+    }
+
     *processDone = true;
 }
 
@@ -79,4 +93,9 @@ void SpectrumMonitor::setDetector(const QString &detector)
         settingsDB[settingList::detector] = 2;
     else
         qDebug() << "Invalid Detecor Type!";
+}
+
+void SpectrumMonitor::setSaving(bool enable)
+{
+    isSaving = enable;
 }

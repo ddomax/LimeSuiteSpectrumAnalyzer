@@ -12,8 +12,11 @@ public:
     int16_t *inBuffer;
     double *freqOutBuffer;
     double *fftOutBuffer;
+    double *freqSaveBuffer;
+    double *fftSaveBuffer;
     bool *processDone;
     bool *drawDone;
+    bool *saveDone;
     const int paramSampleNumMax = 1<<22;
     void setSampleNum(double sampleNum);
     void setNFFT(double nfft);
@@ -21,6 +24,7 @@ public:
     void setSpan(double span);
     void setGain(double gain);
     void setDetector(const QString& detector);
+    void setSaving(bool enable);
     static const int FFTOUTNUM = 16384;
 
 public slots:
@@ -28,9 +32,11 @@ public slots:
 
 signals:
     void rePlot();
+    void saveFrame(int frameSize);
 
 private:
     bool isRunning = false;
+    bool isSaving = false;
     double settingsDB[6];
     enum settingList
     {

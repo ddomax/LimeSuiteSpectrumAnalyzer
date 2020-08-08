@@ -9,7 +9,7 @@ SpectrumPlotter::SpectrumPlotter (QObject *parent)
     xData.resize(FFTOUTNUM);
     yData.resize(FFTOUTNUM);
     socket = new QUdpSocket();
-    socket->bind(QHostAddress("192.168.10.19"), 4012);
+    socket->bind(QHostAddress::LocalHost, 4012);
     connect(socket, &QUdpSocket::readyRead, this, &SpectrumPlotter::sendUDP);
 }
 
@@ -174,6 +174,8 @@ void SpectrumPlotter::runPlotter()
 
     specPlot->replot();
     *drawDone = true;
+    if (replayMode)
+        emit readFrame(FFTOUTNUM);
 }
 
 
@@ -209,5 +211,5 @@ void SpectrumPlotter::sendUDP()
 //    qDebug() << tmp.writeDatagram((char*)&yData[0], yData.size(), QHostAddress::LocalHost, 4013);
 //    qDebug() << tmp.writeDatagram((char*)&yData[0], 8, QHostAddress::LocalHost, 4013);
     double tracerVal = tracer->position->value();
-    qDebug() << tmp.writeDatagram((char*)&tracerVal, sizeof (double), QHostAddress("192.168.10.35"), 4013);
+    qDebug() << tmp.writeDatagram((char*)&tracerVal, sizeof (double), QHostAddress::LocalHost, 4013);
 }
